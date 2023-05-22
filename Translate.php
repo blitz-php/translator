@@ -22,7 +22,7 @@ use MessageFormatter;
  *
  * @credit <a href="http://codeigniter.com">CodeIgniter4 - CodeIgniter\Language\Language</a>
  */
-class Language
+class Translate
 {
     /**
      * Stores the retrieved language lines
