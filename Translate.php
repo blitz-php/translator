@@ -16,30 +16,27 @@ use BlitzPHP\Autoloader\Locator;
 use MessageFormatter;
 
 /**
- * Handle system messages and localization.
+ * Gérer les messages système et la localisation.
  *
- * Locale-based, built on top of PHP internationalization.
+ * Basé sur les paramètres régionaux, construit sur l'internationalisation de PHP.
  *
  * @credit <a href="http://codeigniter.com">CodeIgniter4 - CodeIgniter\Language\Language</a>
  */
 class Translate
 {
     /**
-     * Stores the retrieved language lines
-     * from files for faster retrieval on
-     * second use.
+     * Stocke les lignes de langue récupérées à partir des fichiers pour une récupération
+	 * plus rapide lors d'une deuxième utilisation.
      */
     protected array $language = [];
 
     /**
-     * Boolean value whether the intl
-     * libraries exist on the system.
+     * Valeur booléenne indiquant si les bibliothèques intl existent sur le système.
      */
     protected bool $intlSupport = false;
 
     /**
-     * Stores filenames that have been
-     * loaded so that we don't load them again.
+     * Stocke les noms de fichiers qui ont été chargés afin que nous ne les chargions plus.
      */
     protected array $loadedFiles = [];
 
@@ -48,7 +45,7 @@ class Translate
 	/**
 	 * Constructor
 	 *
-	 * @param string $locale The current language/locale to work with.
+	 * @param string $locale La langue/paramètres régionaux actuels avec lesquels travailler.
 	 */
     public function __construct(protected string $locale)
     {
@@ -58,7 +55,7 @@ class Translate
     }
 
     /**
-     * Sets the current locale to use when performing string lookups.
+     * Définit les paramètres régionaux actuels à utiliser lors de l'exécution de recherches de chaînes.
      */
     public function setLocale(?string $locale = null): self
     {
@@ -75,20 +72,18 @@ class Translate
     }
 
     /**
-     * Parses the language string for a file, loads the file, if necessary,
-     * getting the line.
+     * Analyse la chaîne de langue d'un fichier, charge le fichier, si nécessaire, en obtenant la ligne.
      *
      * @return string|string[]
      */
     public function getLine(string $line, array $args = [])
     {
-        // if no file is given, just parse the line
+        // si aucun fichier n'est donné, il suffit d'analyser la ligne
         if (strpos($line, '.') === false) {
             return $this->formatMessage($line, $args);
         }
 
-        // Parse out the file name and the actual alias.
-        // Will load the language file and strings.
+        // Analysez le nom du fichier et l'alias réel. Chargera le fichier de langue et les chaînes.
         [$file, $parsedLine] = $this->parseLine($line, $this->locale);
 
         $output = $this->getTranslationOutput($this->locale, $file, $parsedLine);
@@ -101,7 +96,7 @@ class Translate
             $output = $this->getTranslationOutput($locale, $file, $parsedLine);
         }
 
-        // if still not found, try English
+        // si toujours introuvable, essayez l'anglais
         if ($output === null) {
             [$file, $parsedLine] = $this->parseLine($line, 'en');
 
@@ -145,8 +140,8 @@ class Translate
     }
 
     /**
-     * Parses the language string which should include the
-     * filename as the first segment (separated by period).
+     * Analyse la chaîne de langue qui doit inclure le nom de fichier
+	 * comme premier segment (séparé par un point).
      */
     protected function parseLine(string $line, string $locale): array
     {
@@ -161,7 +156,7 @@ class Translate
     }
 
     /**
-     * Advanced message formatting.
+     * Formatage avancé des messages.
      *
      * @param array|string $message
      * @param string[]     $args
@@ -186,9 +181,9 @@ class Translate
     }
 
     /**
-     * Loads a language file in the current locale. If $return is true,
-     * will return the file's contents, otherwise will merge with
-     * the existing language lines.
+     * Charge un fichier de langue dans les paramètres régionaux actuels.
+	 * Si $return est vrai, renverra le contenu du fichier,
+	 * sinon fusionnera avec les lignes de langage existantes.
      *
      * @return array|void
      */
@@ -199,7 +194,7 @@ class Translate
         }
 
         if (in_array($file, $this->loadedFiles[$locale], true)) {
-            // Don't load it more than once.
+            // Ne le chargez pas plus d'une fois.
             return [];
         }
 
@@ -211,7 +206,7 @@ class Translate
             $this->language[$locale][$file] = [];
         }
 
-        $path = "Language/{$locale}/{$file}.php";
+        $path = "Translations/{$locale}/{$file}.php";
 
         $lang = $this->requireFile($path);
 
@@ -221,13 +216,12 @@ class Translate
 
         $this->loadedFiles[$locale][] = $file;
 
-        // Merge our string
+        // Fusionner notre chaîne
         $this->language[$locale][$file] = $lang;
     }
 
     /**
-     * A simple method for including files that can be
-     * overridden during testing.
+     * Une méthode simple pour inclure des fichiers qui peuvent être remplacés lors des tests.
      */
     protected function requireFile(string $path): array
     {
@@ -235,10 +229,9 @@ class Translate
         $strings = [];
 
         foreach ($files as $file) {
-            // On some OS's we were seeing failures
-            // on this command returning boolean instead
-            // of array during testing, so we've removed
-            // the require_once for now.
+            // Sur certains systèmes d'exploitation,
+			// nous voyions des échecs sur cette commande renvoyant un booléen au lieu d'un tableau f pendant les tests,
+			// nous avons donc supprimé le require_once pour l'instant.
             if (is_file($file)) {
                 $strings[] = require $file;
             }
