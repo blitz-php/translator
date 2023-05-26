@@ -254,8 +254,10 @@ class Translate
 			return $this->locator;
 		}
 
-		$autoloader = new Autoloader();
+		$autoloader = new Autoloader([
+            'psr4' => [__NAMESPACE__ => __DIR__]
+        ]);
 
-		return $this->locator = new Locator($autoloader);
+		return $this->locator = new Locator($autoloader->initialize());
 	}
 }
