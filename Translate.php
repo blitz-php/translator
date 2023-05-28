@@ -40,14 +40,13 @@ class Translate
      */
     protected array $loadedFiles = [];
 
-	protected ?Locator $locator = null;
 
 	/**
 	 * Constructor
 	 *
 	 * @param string $locale La langue/paramètres régionaux actuels avec lesquels travailler.
 	 */
-    public function __construct(protected string $locale)
+    public function __construct(protected string $locale, protected ?Locator $locator = null)
     {
         if (class_exists(MessageFormatter::class)) {
             $this->intlSupport = true;
