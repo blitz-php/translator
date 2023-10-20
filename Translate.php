@@ -13,6 +13,7 @@ namespace BlitzPHP\Translator;
 
 use BlitzPHP\Autoloader\Autoloader;
 use BlitzPHP\Autoloader\Locator;
+use InvalidArgumentException;
 use MessageFormatter;
 
 /**
@@ -176,7 +177,12 @@ class Translate
             return $message;
         }
 
-        return MessageFormatter::formatMessage($this->locale, $message, $args);
+		$formatted = MessageFormatter::formatMessage($this->locale, $message, $args);
+        if ($formatted === false) {
+            throw new InvalidArgumentException(sprintf('Format de message non valide : %s, arguments : %s', $message, implode(', ', $args)));
+        }
+
+        return $formatted;
     }
 
     /**
