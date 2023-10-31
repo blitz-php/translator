@@ -27,7 +27,7 @@ class Translate
 {
     /**
      * Stocke les lignes de langue récupérées à partir des fichiers pour une récupération
-	 * plus rapide lors d'une deuxième utilisation.
+     * plus rapide lors d'une deuxième utilisation.
      */
     protected array $language = [];
 
@@ -41,12 +41,11 @@ class Translate
      */
     protected array $loadedFiles = [];
 
-
-	/**
-	 * Constructor
-	 *
-	 * @param string $locale La langue/paramètres régionaux actuels avec lesquels travailler.
-	 */
+    /**
+     * Constructor
+     *
+     * @param string $locale La langue/paramètres régionaux actuels avec lesquels travailler.
+     */
     public function __construct(protected string $locale, protected ?Locator $locator = null)
     {
         if (class_exists(MessageFormatter::class)) {
@@ -79,7 +78,7 @@ class Translate
     public function getLine(string $line, array $args = [])
     {
         // si aucun fichier n'est donné, il suffit d'analyser la ligne
-        if (strpos($line, '.') === false) {
+        if (! str_contains($line, '.')) {
             return $this->formatMessage($line, $args);
         }
 
@@ -141,7 +140,7 @@ class Translate
 
     /**
      * Analyse la chaîne de langue qui doit inclure le nom de fichier
-	 * comme premier segment (séparé par un point).
+     * comme premier segment (séparé par un point).
      */
     protected function parseLine(string $line, string $locale): array
     {
@@ -187,8 +186,8 @@ class Translate
 
     /**
      * Charge un fichier de langue dans les paramètres régionaux actuels.
-	 * Si $return est vrai, renverra le contenu du fichier,
-	 * sinon fusionnera avec les lignes de langage existantes.
+     * Si $return est vrai, renverra le contenu du fichier,
+     * sinon fusionnera avec les lignes de langage existantes.
      *
      * @return array|void
      */
@@ -235,8 +234,8 @@ class Translate
 
         foreach ($files as $file) {
             // Sur certains systèmes d'exploitation,
-			// nous voyions des échecs sur cette commande renvoyant un booléen au lieu d'un tableau f pendant les tests,
-			// nous avons donc supprimé le require_once pour l'instant.
+            // nous voyions des échecs sur cette commande renvoyant un booléen au lieu d'un tableau f pendant les tests,
+            // nous avons donc supprimé le require_once pour l'instant.
             if (is_file($file)) {
                 $strings[] = require $file;
             }
@@ -253,16 +252,16 @@ class Translate
         return $strings;
     }
 
-	protected function locator(): Locator
-	{
-		if (null !== $this->locator) {
-			return $this->locator;
-		}
+    protected function locator(): Locator
+    {
+        if (null !== $this->locator) {
+            return $this->locator;
+        }
 
-		$autoloader = new Autoloader([
-            'psr4' => [__NAMESPACE__ => __DIR__]
+        $autoloader = new Autoloader([
+            'psr4' => [__NAMESPACE__ => __DIR__],
         ]);
 
-		return $this->locator = new Locator($autoloader->initialize());
-	}
+        return $this->locator = new Locator($autoloader->initialize());
+    }
 }
