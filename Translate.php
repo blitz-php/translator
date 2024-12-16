@@ -13,6 +13,7 @@ namespace BlitzPHP\Translator;
 
 use BlitzPHP\Autoloader\Autoloader;
 use BlitzPHP\Autoloader\Locator;
+use BlitzPHP\Contracts\Autoloader\LocatorInterface;
 use InvalidArgumentException;
 use MessageFormatter;
 
@@ -46,7 +47,7 @@ class Translate
      *
      * @param string $locale La langue/paramètres régionaux actuels avec lesquels travailler.
      */
-    public function __construct(protected string $locale, protected ?Locator $locator = null)
+    public function __construct(protected string $locale, protected ?LocatorInterface $locator = null)
     {
         if (class_exists(MessageFormatter::class)) {
             $this->intlSupport = true;
@@ -252,7 +253,7 @@ class Translate
         return $strings;
     }
 
-    protected function locator(): Locator
+    protected function locator(): LocatorInterface
     {
         if (null !== $this->locator) {
             return $this->locator;
