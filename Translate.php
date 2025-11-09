@@ -74,7 +74,7 @@ class Translate
     /**
      * Analyse la chaîne de langue d'un fichier, charge le fichier, si nécessaire, en obtenant la ligne.
      *
-     * @return string|string[]
+     * @return list<string>|string
      */
     public function getLine(string $line, array $args = [])
     {
@@ -159,7 +159,7 @@ class Translate
      * Formatage avancé des messages.
      *
      * @param array|string $message
-     * @param string[]     $args
+     * @param list<string> $args
      *
      * @return array|string
      */
@@ -177,9 +177,9 @@ class Translate
             return $message;
         }
 
-		$formatted = MessageFormatter::formatMessage($this->locale, $message, $args);
+        $formatted = MessageFormatter::formatMessage($this->locale, $message, $args);
         if ($formatted === false) {
-            throw new InvalidArgumentException(sprintf('Format de message non valide : %s, arguments : %s', $message, implode(', ', $args)));
+            throw new InvalidArgumentException(sprintf("Format de message non valide\u{a0}:\u{a0}%s, arguments\u{a0}:\u{a0}%s", $message, implode(', ', $args)));
         }
 
         return $formatted;
